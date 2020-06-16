@@ -72,8 +72,7 @@ function beforeHook(_request, ...beforeArr) {
 
             !ok && reject(msg);
 
-            if (len--) {
-                if (!beforeArr[len]) return next();
+            if (--len >= 0) {
                 beforeArr[len].call(_request, next);
             } else {
                 resolve();
