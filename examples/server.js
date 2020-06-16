@@ -20,10 +20,6 @@ app.use(require("webpack-dev-middleware")(compiler, {
 // 接受更新的模块, 可以将更新代码实时应用到当前页面中
 app.use(require("webpack-hot-middleware")(compiler))
 
-app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/index.html");
-});
-
 app.use(express.static(__dirname))
 
 const port = process.env.PORT || 8080
