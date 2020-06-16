@@ -15,24 +15,27 @@
     </div>
   </div>
   <div class="content">
-    <ul class="user-list">
-      <li v-for="(item, index) in realUser" :key="index">
-        {{ item.key }} : {{ item.val }}
-      </li>
-    </ul>
-
-    <ul class="storage-info" v-if="realStorage.length">
-      <li v-for="(item, index) in realStorage" :key="index">
-        {{ item.key }} : {{ item.val }}
-      </li>
-    </ul>
+    <list class="list-one" :items="realUser"></list>
+    <list class="list-two" v-if="realStorage.length" :items="realStorage"></list>
   </div>
 </div>
 </template>
 <script>
   import model from '../apis/Model'
+  import List from "./List.vue"
+
+  const createMap = function (data) {
+      return Object.keys(data).reduce((arr, key) => {
+          arr.push({ key, val: data[key] })
+          return arr;
+      }, [])
+  }
+
   export default {
       name: "BasicApp",
+      components: {
+        List
+      },
       data() {
           return {
               username: "qiqingfu",
@@ -44,9 +47,8 @@
       methods: {
           getUser() {
               model.getUser(this.username)
-                .then(res => {
-                    console.log(res)
-                    this.userInfo = res.body
+                .then(({ body }) => {
+                    this.userInfo = body
                 })
                 .catch(err => {
                     console.log(err)
@@ -62,8 +64,8 @@
               }
 
               model.getStorage({user: this.username, name: this.storageName})
-                .then(res => {
-                    this.storageInfo = res.body;
+                .then(({ body }) => {
+                    this.storageInfo = body;
                 })
                 .catch(err => {
                     console.log(err)
@@ -72,16 +74,10 @@
       },
       computed: {
           realUser() {
-              return Object.keys(this.userInfo).reduce((arr, key) => {
-                  arr.push({ key, val: this.userInfo[key] })
-                  return arr;
-              }, [])
+              return createMap(this.userInfo)
           },
           realStorage() {
-              return Object.keys(this.storageInfo).reduce((arr, key) => {
-                  arr.push({ key, val: this.storageInfo[key] })
-                  return arr;
-              }, [])
+              return createMap(this.storageInfo)
           }
       }
   }
@@ -98,19 +94,10 @@
   .content {
     display: flex;
   }
-  .user-list, .storage-info {
-    font-size: 12px;
-    color: #000;
-    list-style: none;
-  }
-  .user-list > li, .storage-info > li {
-    line-height: 22px;
-    border-bottom: solid 1px #ccc;
-  }
-  .user-list {
-    flex: 1;
-  }
-  .storage-info {
+  .list-one {
+      flex: 1;
+    }
+  .list-two {
     margin-left: 40px;
     flex-basis: 50%;
   }
