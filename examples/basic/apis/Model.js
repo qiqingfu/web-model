@@ -39,5 +39,11 @@ export default new Model({
     afterEach(err, res) {
         console.log("实例请求后置拦截器 err", err)
         console.log("实例请求后置拦截器 res", res)
+
+        if (err) return false;
+
+        res._name = "zhangsan"
+
+        return res;
     }
 })
