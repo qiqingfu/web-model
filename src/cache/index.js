@@ -83,13 +83,13 @@ export default function (superAgent) {
              */
             if (CACHE_USED && /null/i.test(Object.prototype.toString.call(err))) {
 
-                // 1. form cache
+                // 1. 创建缓存数据结构
                 let cache = {
                     expire: NOW + request._expire.stamp,
                     data: res
                 };
 
-                // 2. set cache, the key has been formed in get process
+                // 2. 将生成的请求密匙作为 key值, 将 cache 缓存到 sessionStorage 或 localStorage 中
                 if (request._expire.session) {
                     set(window.sessionStorage, request._expire.key, cache);
                 } else {
@@ -120,9 +120,11 @@ export default function (superAgent) {
             );
 
             // cache step 3.2: check expire
+            // 没有过期的情况下, 直接自己内部调用 cb 函数了, 无需让 superagent 内部调用
             if (cache && cache.expire > NOW) {
                 cb(null, cache.data);
             } else {
+                // 已过期, 将缓存清除
                 remove(
                     request._expire.session
                         ? window.sessionStorage
