@@ -3,17 +3,17 @@
  */
 import Model from "web-model";
 
-Model.use({
-    beforeEach(next) {
-        console.log("全局的前置拦截器")
-        next()
-    },
-    afterEach(err, res) {
-        console.log("global err", err)
-        console.log("global res", res)
-        console.log("全局的后置拦截器")
-    }
-})
+// Model.use({
+//     beforeEach(next) {
+//         console.log("全局的前置拦截器")
+//         next()
+//     },
+//     afterEach(err, res) {
+//         console.log("global err", err)
+//         console.log("global res", res)
+//         console.log("全局的后置拦截器")
+//     }
+// })
 
 export default new Model({
     base: "https://api.github.com",
@@ -32,18 +32,18 @@ export default new Model({
             return this.request.get(`/repos/${query.user}/${query.name}`)
         }
     },
-    beforeEach(next) {
-        console.log("实例请求前置拦截器 this", this)
-        next()
-    },
-    afterEach(err, res) {
-        console.log("实例请求后置拦截器 err", err)
-        console.log("实例请求后置拦截器 res", res)
-
-        if (err) return false;
-
-        res._name = "zhangsan"
-
-        return res;
-    }
+    // beforeEach(next) {
+    //     console.log("实例请求前置拦截器 this", this)
+    //     next()
+    // },
+    // afterEach(err, res) {
+    //     console.log("实例请求后置拦截器 err", err)
+    //     console.log("实例请求后置拦截器 res", res)
+    //
+    //     if (err) return false;
+    //
+    //     res._name = "zhangsan"
+    //
+    //     return res;
+    // }
 })

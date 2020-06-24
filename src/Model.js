@@ -66,7 +66,7 @@ function attachSingletonHook(model, key, promiseHandler) {
  */
 function beforeHook(_request, ...beforeArr) {
     return new Promise(function (resolve, reject) {
-        let len = beforeArr.length;
+        let len = getVirtual(beforeArr).length;
 
         function next(ok = true, msg) {
 
@@ -245,5 +245,13 @@ class Model {
 Model.base = "";
 Model.beforeEach = undefined;
 Model.afterEach = undefined;
+
+/**
+ * filter effective interceptors
+ * @param hooks
+ */
+function getVirtual (hooks) {
+    return hooks.filter(hook => hook !== undefined);
+}
 
 export default Model
