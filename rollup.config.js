@@ -11,7 +11,7 @@ import {terser} from "rollup-plugin-terser";
 export default {
     input: "src/Model.js",
     output: {
-        file: "dist/model.js",
+        file: "dist/model.spec.js",
         sourcemap: "hidden",
         format: "es"
     },
